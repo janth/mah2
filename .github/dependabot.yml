@@ -11,4 +11,4 @@ updates:
     schedule:
       interval: "daily"
     # Disable pull-request limit, defaults to 5
-    open-pull-requests-limit: 0
+    open-pull-requests-limit: 10
