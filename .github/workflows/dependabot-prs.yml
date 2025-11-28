@@ -1,0 +1,51 @@
+# https://github.com/marketplace/actions/fetch-metadata-from-dependabot-prs
+
+# .github/workflows/dependabot-prs.yml
+name: Dependabot Pull Request
+on: pull_request
+jobs:
+  dependabot:
+    permissions:
+      pull-requests: read
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'owner/my_repo'
+    steps:
+    - name: Fetch Dependabot metadata
+      id: dependabot-metadata
+      uses: dependabot/fetch-metadata@v2
+      with:
+        alert-lookup: true
+        compat-lookup: true
+        github-token: "${{ secrets.PAT_TOKEN }}"
+
+
+
+name: Dependabot auto-approve
+on: pull_request
+permissions:
+  pull-requests: write
+  contents: write
+jobs:
+  dependabot:
+    runs-on: ubuntu-latest
+    # Checking the author will prevent your Action run failing on non-Dependabot PRs
+    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'owner/my_repo'
+    steps:
+      - name: Dependabot metadata
+        id: dependabot-metadata
+        uses: dependabot/fetch-metadata@v2
+      - uses: actions/checkout@v4
+      - name: Approve a PR if not already approved
+        run: |
+          gh pr checkout "$PR_URL" # sets the upstream metadata for `gh pr status`
+          if [ "$(gh pr status --json reviewDecision -q .currentBranch.reviewDecision)" != "APPROVED" ] ; then
+             gh pr review --approve "$PR_URL"
+             gh pr merge --auto --merge "${{github.event.pull_request.html_url}}"
+          else
+             echo "PR already approved, skipping additional approvals to minimize emails/notification noise."
+          fi
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+          
