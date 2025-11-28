@@ -10,3 +10,5 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
+    # Disable pull-request limit, defaults to 5
+    open-pull-requests-limit: 0
