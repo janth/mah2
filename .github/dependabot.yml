@@ -12,3 +12,13 @@ updates:
       interval: "daily"
     # Disable pull-request limit, defaults to 5
     open-pull-requests-limit: 10
+    rebsae-strategy: 'auto'
+    commit-message:
+      prefix: 'dbot'
+    # cooldown:
+    #    default-days: 7
+    groups:
+      nmpver:
+      # group-by: dependency-name
+      patterns:
+        - '*'
