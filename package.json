@@ -53,7 +53,7 @@
     }
   },
   "devDependencies": {
-    "@angular-builders/custom-esbuild": "20.0.0",
+    "@angular-builders/custom-esbuild": "21.0.3",
     "@angular/build": "20.3.24",
     "@angular/cli": "21.2.7",
     "@angular/compiler-cli": "20.3.12",
